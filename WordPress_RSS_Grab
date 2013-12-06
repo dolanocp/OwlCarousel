@@ -3,8 +3,9 @@ function parse_pinterest_rss()
 	// Get RSS Feed(s)
 	include_once( ABSPATH . WPINC . '/feed.php' );
 
-	// Get a SimplePie feed object from the specified feed source.
-	$rss = fetch_feed( 'http://www.pinterest.com/myPinterestAccount/feed.rss' );
+	// Get a SimplePie feed object from the specified feed source
+	// Replace 'myPinterestAccount' with an actual pinterest account name
+	$rss = fetch_feed( 'http://www.pinterest.com/myPinterestAccount/feed.rss' ); 
 
 	if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
 
