@@ -1,0 +1,38 @@
+function parse_pinterest_rss() 
+{
+	// Get RSS Feed(s)
+	include_once( ABSPATH . WPINC . '/feed.php' );
+
+	// Get a SimplePie feed object from the specified feed source.
+	$rss = fetch_feed( 'http://www.pinterest.com/myPinterestAccount/feed.rss' );
+
+	if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
+
+		// Figure out how many total items there are, but limit it to 50. 
+		$maxitems = $rss->get_item_quantity( 50 ); 
+
+		// Build an array of all the items, starting with element 0 (first element).
+		$rss_items = $rss->get_items( 0, $maxitems );
+
+	endif;
+	
+	$markup = "<div id=\"owl-pinterest\">";
+	$dom = new DOMDocument();
+	if ( $maxitems == 0 )
+	{
+		$markup .= "<p>No items</p>";
+	} else 
+	{
+		// Loop through each feed item and display each item as a hyperlink
+		foreach ( $rss_items as $item )
+		{
+		  $markup .= "<div class = \"item\"><a href='".esc_url( $item->get_permalink() )."' target='_blank'><img src='" .image_from_description($item->get_description()) . "' alt='". esc_html( $item->get_title() )."'/></a>"; 
+		  $markup .= "</div>";
+		}
+	}
+	$markup .= "</div>";
+	return $markup;
+	
+
+}
+add_shortcode('pinterest_feed', 'parse_pinterest_rss');
